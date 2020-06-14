@@ -1,84 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
     <title>
         Hexo
     </title>
+    <!-- favicon -->
     
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
 <link rel="stylesheet" href="/css/style.css">
 
-    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
-    <link rel="stylesheet" href="/css/style/github.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
 <meta name="generator" content="Hexo 4.2.1"></head>
 
-<body>
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
     <div class="container">
-        <div class="header">
-    <!-- <div class="logo">
-        <a href="/">Hexo</a>
-    </div> -->
-    <div class="logo">
-        <img src="/images/logo.png" alt="Logo">
-    </div>
-    <div class="nav">
-        <ul class="menu">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Hexo
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Hexo
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
             
-                <li class="menu-item">
-                    <a href="/" class="menu-item-link">
-                        Home
-                    </a>
-                </li>
+            <li>
+                <a href="https://github.com/FrontendSophie" target="_blank" rel="noopener">
+                    Github
+                </a>
+            </li>
             
-                <li class="menu-item">
-                    <a href="https://github.com/loveminimal" target="_blank" rel="noopener" class="menu-item-link">
-                        Github
-                    </a>
-                </li>
-                
+            <li>
+                <a href="https://www.linkedin.com/in/frontendsophie/" target="_blank" rel="noopener">
+                    LinkedIn
+                </a>
+            </li>
+            
         </ul>
     </div>
-</div>
-        <div class="archive">
-    <ul class="post-archive">
+</header>
+        <main class="main">
+            
+<section class="posts">
+    
+        <article class="post">
+            
+                <h4 class="post-cat">
+                    <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                        技术
+                    </a>
+                </h4>
+                
+                <h4 class="post-cat">
+                    <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%89%8D%E7%AB%AF/">
+                        前端
+                    </a>
+                </h4>
+                
+                    <h1 class="post-title">
+                        <a href="/2020/06/12/first-post/">
+                            first post
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            June 12, 2020
+                        </li>
+                        <li>
+                            John Doe
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        
+                            <a href="/2020/06/12/first-post/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
         
-        <li class="post-item">
-            <span class="post-date">
-                20/06/12</span>
-            <a href="/2020/06/12/first-post/" class="post-title">
-                first post
-            </a>
-        </li>
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/06/12/hello-world/">
+                            Hello World
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            June 12, 2020
+                        </li>
+                        <li>
+                            John Doe
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        
+                            <a href="/2020/06/12/hello-world/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
         
-        <li class="post-item">
-            <span class="post-date">
-                20/06/12</span>
-            <a href="/2020/06/12/hello-world/" class="post-title">
-                Hello World
-            </a>
-        </li>
-        
-    </ul>
-</div>
+</section>
 
-        <div class="footer">
-    <a href="#">
-        2018 <i class="fab fa-studiovinari"></i> John Doe <i class="fas fa-angle-double-up"></i>
-    </a>
-</div>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
 
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E5%89%8D%E7%AB%AF/">前端</a></li></ul></li></ul>
 
-<script src="/js/totop.js"></script>
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
 
 
-<script src="/js/search.js"></script>
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
 
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/" rel="tag">个人感悟</a></li></ul>
+
+            </section>
+        </aside>
     </div>
 </body>
 
