@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Hexo
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Hexo
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Hexo
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a href="https://github.com/FrontendSophie" target="_blank" rel="noopener">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a href="https://www.linkedin.com/in/frontendsophie/" target="_blank" rel="noopener">
+                    LinkedIn
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    <h4 class="post-cat">
+        <a href="/categories/%E5%BA%95%E5%B1%82%E7%9F%A5%E8%AF%86/">
+            底层知识
+        </a>
+    </h4>
+    
+    
+    <h2 class="post-title">
+        函数调用中栈帧变化情况详解
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-06-15
+        </li>
+        <li>
+            John Doe
+        </li>
+    </ul>
+    <div class="post-content">
+        <p>现假设在函数A中调用函数B，调用一个函数时，压栈操作顺序为</p>
+<ol>
+<li>压参数，顺序为从右往左压。</li>
+<li>压返回地址</li>
+<li>压old ebp，即保存A函数的栈底指针，此时才进入B函数的栈帧</li>
+<li>开辟局部变量空间</li>
+<li>保存相关寄存器的值<br><strong>现在我们根据下面的代码来分析</strong><br>gcd(int a, int b)为一个递归函数，递归条件为传入的参数b不为0，相应的基线条件为传入的参数b为0.<br>这里作一个简要的说明，每个递归函数都有两个部分：<strong>基线条件</strong>和<strong>递归条件</strong>。<br>基线条件为递归函数不再调用自己，递归条件为函数调用自己的条件。<br>`int gcd(int a,int b)<br>{<pre><code>  if(!b)
+  {
+  return a;
+  }  
+  return gcd(a,a%b);</code></pre>}`<br>现在我们在main()函数中调用gcd(int a, int b)函数</li>
+</ol>
+<pre><code>int main()
+{
+    int a = gcd(18,5);
+    return 0;
+}</code></pre><p>代码的运行环境为VC++6.0，在int a=gcd(18,5)处设置断点<br><img src="https://img-blog.csdnimg.cn/20190116152024897.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>我们再来看以下程序栈和各个寄存器的值，观察call stack，可以发现，此时还未对gcd函数进行调用，仍然在main()函数栈帧中，其栈底指针ebp的值为0x0019ff40.此时栈顶指针esp值为0x0019fef0.<br><img src="https://img-blog.csdnimg.cn/2019011615221724.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="各个寄存器和栈帧情况"><br>先打开反汇编窗口，查看-&gt;调试窗口-&gt;反汇编看以下反汇编情况对于一个函数的栈帧，其栈底为高地址，栈顶为低地址。我们先来看一下汇编指令<br><img src="https://img-blog.csdnimg.cn/20190116162843549.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>push ebp    //将上一个函数栈底的地址压栈</li>
+<li>mov ebp, esp    //更新ebp的值，将当前esp指向的地址（即存储old ebp值的地址）赋给ebp</li>
+<li>sub esb, 44h    //这句汇编指令的作用是开辟44h局部变量空间，4*16+4=68字节的局部变量空间，此时esp指向所开辟的局部空间的最低地址。在这个示例中，其开辟的局部变量空间地址应为0x0019ff3c—-0x0019fefc.</li>
+<li>push ebx    //保存ebx寄存器的值</li>
+<li>push esi    //保存esi寄存器的值</li>
+<li>push edi    //保存edi寄存器的值</li>
+<li>lea edi, [ebp-44h]    //将ebp-44h的值，赋给edi，这个地址实际是所开辟局部变量空间的最低地址</li>
+<li>mov ecx, 11h    //将11h送进ecx寄存器</li>
+<li>mov eax, 0xcccccccc    //将0xcccccccc的值送进eax中</li>
+<li>rep stos dword ptr [edi]    //用eax中的值初始化地址为edi的内存，dword为双字型，一个字为两个字节，双字为4个字节，每执行一次，edi+4，ecx-1，知道ecx=0为止</li>
+<li>接下来要对gcd()函数进行调用</li>
+<li>push 5    //从右往左，压入参数</li>
+<li>push 12h    //压入18</li>
+<li>call @ILT+0(gcd) (00401005)    //call指令相当于先将函数返回地址压入栈中，再跳转到相应地址执行，此处的返回地址应为call指令的下一条指令地址，为0x00401041.<br><img src="https://img-blog.csdnimg.cn/20190116163716210.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>gcd函数中的汇编指令基本与main()函数相同，不再做详细解释。来看几条特殊指令</li>
+<li>cmp dword ptr [ebp+0c],0    //其实ebp+0c地址中存的，恰好是b的值，对应，ebp+8中存的是a的值，此处将0与b做一比较</li>
+<li>jne gcd+37h(00401093)    //如果b不为0的话，则跳转对应地址。</li>
+<li>mov eax, dword ptr [ebp+8]    </li>
+<li>cdq    //这个指令把 EAX 的第 31 bit 复制到 EDX 的每一个 bit 上。 它大多出现在除法运算之前。它实际的作用只是把EDX的所有位都设成EAX最高位的值。也就是说，当EAX &lt;80000000, EDX 为00000000；当EAX &gt;= 80000000， EDX 则为FFFFFFFF。</li>
+<li>idiv eax, dword ptr [ebp+0Ch]    //被除数为eax，除数为[ebp+0Ch],即b，之后将余数存进edx中，将商存进eax中<br>此时运行到了<br><img src="https://img-blog.csdnimg.cn/20190116172023946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>我们来看一下内存情况，此时已经进入gcd()函数的栈帧，观察内存情况，0x0019fee0为其栈底，保存的值为main()函数的栈底指针，其开辟了40h的局部变量内存空间，计算0x0019fee0-40h=0x0019fea0,开辟完局部空间后，对相关寄存器的值进行了压栈，分别为ebx(0x0019fe9c),esi(0x0019fe98),edi(0x0019fe94)<br><img src="https://img-blog.csdnimg.cn/20190116172047256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>运行到下图这里gcd(18,5)的栈帧便结束了，并即将进入gcd(5,3)的栈帧，在保存完gcd(18,5)的相关寄存器的值之后，要调用gcd(5,3)时，在gcd(18,5)的栈帧中压入了相关参数3(0x0019fe90)和5(0x0019fe8c),执行call指令压入了返回地址0x004010a4.<br>到这里函数gcd(18,5)的栈帧便结束了。对于后续调用gcd(5,3)、gcd(3,2)、gcd(2,1)和gcd(1,0)的栈帧情况基本是一致的。<br><img src="https://img-blog.csdnimg.cn/20190116173314638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>再来看看函数返回时的情况，先将返回值送入eax寄存器中，之后跳转到0x004010a7处<br><img src="https://img-blog.csdnimg.cn/20190116183554435.png" alt="在这里插入图片描述"><br>从gcd(1,0)的栈帧中分别将edi, esi, ebx的值恢复，回收开辟的局部变量空间，比较ebp和esp的值，相等时ret(将之前压的返回地址赋给EIP)。将gcd(1,0)栈帧中栈底指针ebp的值赋给esp，从栈中弹出gcd(2,1)的栈底指针赋给ebp。此时esp+4，指向gcd(2,1)的返回地址，ret指令将其赋给eip。<br><img src="https://img-blog.csdnimg.cn/20190116183441243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>eip永远指向下一条将要执行的指令，观察内存可以发现，此时esp地址中存的值为参数，再观察汇编代码，通过add esp，8，使esp指向gcd(2,1)栈帧中edi的值，重复从gcd(1,0)返回到gcd(2,1)的过程。<br><img src="https://img-blog.csdnimg.cn/20190116185642617.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MzUzMjQ2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BA%95%E5%B1%82%E7%9F%A5%E8%AF%86/">底层知识</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E5%89%8D%E7%AB%AF/">前端</a></li></ul></li></ul>
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/" rel="tag">个人感悟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B3%BB%E7%BB%9F%E7%BA%A7%E7%BC%96%E7%A8%8B/" rel="tag">系统级编程</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
